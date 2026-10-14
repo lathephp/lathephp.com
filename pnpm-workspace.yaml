@@ -1,3 +1,6 @@
 # Compromised releases are usually caught and unpublished within hours, so hold
 # off installing anything published in the last week.
 minimumReleaseAge: 10080
+
+allowBuilds:
+  esbuild: true

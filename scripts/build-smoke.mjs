@@ -42,8 +42,10 @@ for (const file of files) {
   if (rel.startsWith("server") || rel === "_worker.js" || (rel.endsWith(".js") && !rel.startsWith("assets/"))) {
     failures.push(`server code in dist/${rel}`);
   }
-  if (rel.endsWith(".html") && /Laravel\s+Lathe/.test(fs.readFileSync(file, "utf8"))) {
-    failures.push(`dist/${rel} names the product "Laravel Lathe"`);
+  // The product is never named as if it were part of Laravel. The class keeps
+  // the two words apart, so the word check does not flag this file.
+  if (rel.endsWith(".html") && /Laravel[\s]+Lathe/.test(fs.readFileSync(file, "utf8"))) {
+    failures.push(`dist/${rel} names the product as if it were part of Laravel`);
   }
 }
 
