@@ -41,8 +41,9 @@ export default function DocsLayout() {
             </Link>
           </div>
 
-          {/* Center: search */}
-          <div className="mx-auto hidden max-w-md flex-1 justify-center sm:flex lg:max-w-sm">
+          {/* Center: search. One instance on every screen size, since each
+              instance listens for Ctrl+K and opens its own dialog. */}
+          <div className="mx-auto flex max-w-md flex-1 justify-center lg:max-w-sm">
             <DocsSearch />
           </div>
 
@@ -65,9 +66,6 @@ export default function DocsLayout() {
               />
             </div>
             <ThemeToggle />
-            <div className="sm:hidden">
-              <DocsSearch />
-            </div>
           </div>
         </div>
       </header>
