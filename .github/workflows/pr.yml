@@ -1,0 +1,46 @@
+name: Pull request checks
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The word check also reads every commit message.
+          fetch-depth: 0
+
+      # The site builds from the docs folder of lathephp/lathe at main. While
+      # that repo is private, LATHE_DOCS_TOKEN must be a token that can read it.
+      - uses: actions/checkout@v4
+        with:
+          repository: lathephp/lathe
+          ref: main
+          path: .lathe
+          token: ${{ secrets.LATHE_DOCS_TOKEN || github.token }}
+          sparse-checkout: docs
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Word check
+        run: pnpm check:words
+
+      - name: Build smoke test
+        run: pnpm check:smoke
+        env:
+          LATHE_DOCS_DIR: .lathe/docs
+
+      - name: Link check
+        run: pnpm check:links

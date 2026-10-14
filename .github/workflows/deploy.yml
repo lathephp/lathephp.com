@@ -1,0 +1,68 @@
+name: Build site
+
+on:
+  push:
+    branches: [main]
+  # A Lathe release sends {"tag": "<release tag>"} to rebuild the docs.
+  repository_dispatch:
+    types: [lathe-release]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # While lathephp/lathe is private, LATHE_DOCS_TOKEN must be a token that
+      # can read it.
+      GH_TOKEN: ${{ secrets.LATHE_DOCS_TOKEN || github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # A release dispatch names its tag. A push to main builds the latest
+      # release, or main while lathephp/lathe has no release yet.
+      - name: Pick the docs ref
+        env:
+          DISPATCH_TAG: ${{ github.event.client_payload.tag }}
+        run: |
+          ref="$DISPATCH_TAG"
+          if [ -z "$ref" ]; then
+            ref=$(gh release view --repo lathephp/lathe --json tagName --jq .tagName 2>/dev/null || true)
+          fi
+          echo "LATHE_DOCS_REF=${ref:-main}" >> "$GITHUB_ENV"
+
+      # The build clones docs/ of lathephp/lathe at LATHE_DOCS_REF over https.
+      - name: Let git read lathephp/lathe
+        run: git config --global url."https://x-access-token:${GH_TOKEN}@github.com/lathephp/lathe".insteadOf "https://github.com/lathephp/lathe"
+
+      - run: pnpm build
+
+      - run: pnpm check:links
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-${{ env.LATHE_DOCS_REF }}
+          path: dist/
+          if-no-files-found: error
+
+      # TODO(Saiful): deploy dist/ to Cloudflare Pages with the cf CLI, using a
+      # Cloudflare API token stored as a repository secret. Then remove this
+      # comment and add the step, for example:
+      # - name: Deploy to Cloudflare Pages
+      #   run: cf pages deploy dist --project-name lathephp-com
+      #   env:
+      #     CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
