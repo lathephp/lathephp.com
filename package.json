@@ -1,0 +1,19 @@
+{
+  "name": "lathephp.com",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "check:words": "bash scripts/check-word.sh",
+    "check:links": "node scripts/check-links.mjs",
+    "check:smoke": "node scripts/build-smoke.mjs",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}
