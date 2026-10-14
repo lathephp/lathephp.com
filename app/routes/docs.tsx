@@ -4,7 +4,7 @@ import { ThemeToggle } from "~/components/theme-toggle";
 import { DocsNavigation } from "~/components/docs/docs-navigation";
 import { DocsMobileNav } from "~/components/docs/docs-mobile-nav";
 import { DocsSearch } from "~/components/docs/docs-search";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { RiMenuLine, RiCloseLine } from "@remixicon/react";
 import { useCallback, useState } from "react";
 // Generated class table for Shiki's token colors, see transformerStyleToClass
@@ -50,20 +50,20 @@ export default function DocsLayout() {
           {/* Right: links + theme */}
           <div className="flex items-center gap-1">
             <div className="hidden items-center gap-0.5 sm:flex">
-              <Button
-                variant="link"
-                size="sm"
-                className="text-muted-foreground"
-                nativeButton={false}
-                render={<a href="https://demo.lathephp.com">Demo</a>}
-              />
-              <Button
-                variant="link"
-                size="sm"
-                className="text-muted-foreground"
-                nativeButton={false}
-                render={<a href="https://github.com/lathephp/benchmarks">Benchmarks</a>}
-              />
+              {/* Plain links styled as buttons: the Button component would
+                  give them role="button". */}
+              <a
+                href="https://demo.lathephp.com"
+                className={buttonVariants({ variant: "link", size: "sm", className: "text-muted-foreground" })}
+              >
+                Demo
+              </a>
+              <a
+                href="https://github.com/lathephp/benchmarks"
+                className={buttonVariants({ variant: "link", size: "sm", className: "text-muted-foreground" })}
+              >
+                Benchmarks
+              </a>
             </div>
             <ThemeToggle />
           </div>

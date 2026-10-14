@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { RiArrowRightLine, RiBarChartLine, RiPlayLine } from "@remixicon/react";
 import { LatheLogo } from "~/components/lathe-logo";
 import { ThemeToggle } from "~/components/theme-toggle";
-import { Button } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
 
 const title = "Lathe, an admin panel builder for Laravel";
 const description =
@@ -27,7 +27,9 @@ export default function Home() {
             <LatheLogo />
           </Link>
           <div className="flex items-center gap-1">
-            <Button variant="link" size="sm" className="text-muted-foreground" nativeButton={false} render={<Link to="/docs">Docs</Link>} />
+            <Link to="/docs" className={buttonVariants({ variant: "link", size: "sm", className: "text-muted-foreground" })}>
+              Docs
+            </Link>
             <ThemeToggle />
           </div>
         </div>
@@ -40,19 +42,21 @@ export default function Home() {
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">{description}</p>
 
+        {/* Plain links styled as buttons: the Button component would give
+            them role="button". */}
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button size="lg" nativeButton={false} render={<Link to="/docs" />}>
+          <Link to="/docs" className={buttonVariants({ size: "lg" })}>
             Read the docs
             <RiArrowRightLine data-icon="inline-end" />
-          </Button>
-          <Button size="lg" variant="outline" nativeButton={false} render={<a href="https://demo.lathephp.com" />}>
+          </Link>
+          <a href="https://demo.lathephp.com" className={buttonVariants({ size: "lg", variant: "outline" })}>
             <RiPlayLine data-icon="inline-start" />
             Try the demo
-          </Button>
-          <Button size="lg" variant="outline" nativeButton={false} render={<a href="https://github.com/lathephp/benchmarks" />}>
+          </a>
+          <a href="https://github.com/lathephp/benchmarks" className={buttonVariants({ size: "lg", variant: "outline" })}>
             <RiBarChartLine data-icon="inline-start" />
             Benchmark results
-          </Button>
+          </a>
         </div>
       </main>
 
