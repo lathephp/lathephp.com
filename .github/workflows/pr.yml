@@ -34,13 +34,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Word check
-        run: pnpm check:words
-
       - name: Build smoke test
         run: pnpm check:smoke
         env:
           LATHE_DOCS_DIR: .lathe/docs
+
+      # After the build, so the word check also scans dist/.
+      - name: Word check
+        run: pnpm check:words
 
       - name: Link check
         run: pnpm check:links
