@@ -1,4 +1,5 @@
-// Checks that every internal href and src in the built HTML points at a file in dist/.
+// Checks that every internal href and src in the built HTML points at a file in
+// dist/, and that every #anchor names an id on the page it points at.
 import fs from "node:fs";
 import path from "node:path";
 
@@ -11,12 +12,23 @@ function walk(dir) {
   });
 }
 
-function resolves(target) {
-  const clean = decodeURIComponent(target.replace(/[#?].*$/, ""));
-  const file = path.join(dist, clean);
-  if (!file.startsWith(dist)) return false;
-  if (fs.existsSync(file) && fs.statSync(file).isFile()) return true;
-  return fs.existsSync(path.join(file, "index.html")) || fs.existsSync(`${file}.html`);
+// The built file a site path is served from, or null.
+function resolve(pathname) {
+  const file = path.join(dist, decodeURIComponent(pathname));
+  if (!file.startsWith(dist)) return null;
+  if (fs.existsSync(file) && fs.statSync(file).isFile()) return file;
+  for (const candidate of [path.join(file, "index.html"), `${file}.html`]) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return null;
+}
+
+const ids = new Map();
+function hasId(file, id) {
+  if (!ids.has(file)) {
+    ids.set(file, new Set([...fs.readFileSync(file, "utf8").matchAll(/\sid="([^"]*)"/g)].map((m) => m[1])));
+  }
+  return ids.get(file).has(decodeURIComponent(id));
 }
 
 const pages = fs.existsSync(dist) ? walk(dist).filter((file) => file.endsWith(".html")) : [];
@@ -31,10 +43,14 @@ for (const page of pages) {
   const html = fs.readFileSync(page, "utf8");
   const pageUrl = "/" + path.relative(dist, path.dirname(page)) + "/";
   for (const [, attr, value] of html.matchAll(/\s(href|src)="([^"]*)"/g)) {
-    if (/^([a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value) || value === "") continue;
-    const target = new URL(value, `http://site${pageUrl}`).pathname;
+    if (/^([a-z][a-z0-9+.-]*:|\/\/)/i.test(value) || value === "" || value === "#") continue;
+    const url = new URL(value, `http://site${pageUrl}`);
+    const file = value.startsWith("#") ? page : resolve(url.pathname);
     checked++;
-    if (!resolves(target)) broken.push(`${path.relative(dist, page)}: ${attr}="${value}"`);
+    const hash = url.hash.slice(1);
+    if (!file || (hash && !(file.endsWith(".html") && hasId(file, hash)))) {
+      broken.push(`${path.relative(dist, page)}: ${attr}="${value}"`);
+    }
   }
 }
 

@@ -28,6 +28,25 @@ test("the commands page lists lathe:doctor", async ({ page }) => {
   await expect(page.getByRole("cell", { name: "lathe:doctor", exact: true })).toBeVisible();
 });
 
+test("Ctrl+K opens exactly one search dialog", async ({ page }) => {
+  await page.goto("/docs/getting-started/installation");
+  await page.waitForLoadState("networkidle");
+  await page.keyboard.press("Control+k");
+  // A second modal dialog hides the first from the accessibility tree, so
+  // count the dialog elements themselves.
+  await expect(page.locator('[role="dialog"]')).toHaveCount(1);
+});
+
+// Cloudflare Pages may serve a page at /docs/x/y/ as well as /docs/x/y.
+test("a page opened with a trailing slash is marked current", async ({ page }) => {
+  await page.goto("/docs/getting-started/configuration/");
+  await page.waitForLoadState("networkidle");
+  const sidebar = page.getByRole("navigation", { name: "Docs" });
+  await expect(sidebar.getByRole("link", { name: "Configuration" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: /^Previous/ })).toHaveAttribute("href", "/docs/getting-started/deployment");
+  await expect(page.getByRole("link", { name: /^Next/ })).toHaveAttribute("href", "/docs/getting-started/commands");
+});
+
 test("the landing page links to the docs, the benchmarks and the demo", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle("Lathe, an admin panel builder for Laravel");
