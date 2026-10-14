@@ -24,6 +24,7 @@ for (const page of [
   "docs/index.html",
   "docs/getting-started/configuration/index.html",
   "docs/getting-started/commands/index.html",
+  "favicon.svg",
 ]) {
   if (!fs.existsSync(path.join(dist, page))) failures.push(`missing dist/${page}`);
 }
