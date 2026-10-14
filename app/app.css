@@ -201,3 +201,16 @@
 .dark .doc-img-dark {
   display: block;
 }
+
+/* The docs plugin wraps each table in this box, so a wide table scrolls on
+   its own instead of widening the page. */
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Long inline code, such as a namespaced class name, breaks where it must
+   instead of running past a phone screen. */
+.prose :not(pre) > code {
+  overflow-wrap: anywhere;
+}

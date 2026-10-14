@@ -240,6 +240,28 @@ function rehypeDocLinks() {
   };
 }
 
+// --- Rehype: give each table its own horizontal scroll box ---
+// A wide table would otherwise make the whole page scroll sideways on a phone.
+function rehypeScrollTables() {
+  return (tree: any) => {
+    const walk = (node: any) => {
+      node?.children?.forEach((child: any, i: number) => {
+        if (child?.type === "element" && child.tagName === "table") {
+          node.children[i] = {
+            type: "element",
+            tagName: "div",
+            properties: { className: ["table-scroll"] },
+            children: [child],
+          };
+        } else {
+          walk(child);
+        }
+      });
+    };
+    walk(tree);
+  };
+}
+
 // --- Unified processor factory ---
 
 type StyleToClass = ReturnType<typeof transformerStyleToClass>;
@@ -312,6 +334,7 @@ async function createProcessor(publicDir: string, styleToClass: StyleToClass) {
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(() => rehypeThemeImages(publicDir))
     .use(rehypeDocLinks)
+    .use(rehypeScrollTables)
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings, {
       behavior: "wrap",
