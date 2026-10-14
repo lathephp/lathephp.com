@@ -33,15 +33,16 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # A release dispatch names its tag. A push to main builds the latest
-      # release, or main while lathephp/lathe has no release yet.
+      # A release dispatch names its tag. A push to main builds the newest
+      # release, prereleases included (gh release view skips those), or main
+      # while lathephp/lathe has no release yet. An API error fails the step.
       - name: Pick the docs ref
         env:
           DISPATCH_TAG: ${{ github.event.client_payload.tag }}
         run: |
           ref="$DISPATCH_TAG"
           if [ -z "$ref" ]; then
-            ref=$(gh release view --repo lathephp/lathe --json tagName --jq .tagName 2>/dev/null || true)
+            ref=$(gh api repos/lathephp/lathe/releases --jq '[.[] | select(.draft | not)][0].tag_name // empty')
           fi
           echo "LATHE_DOCS_REF=${ref:-main}" >> "$GITHUB_ENV"
 
@@ -59,9 +60,9 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-      # TODO(Saiful): deploy dist/ to Cloudflare Pages with the cf CLI, using a
-      # Cloudflare API token stored as a repository secret. Then remove this
-      # comment and add the step, for example:
+      # Owner step: the Cloudflare Pages deploy is added here once the Pages
+      # project exists and its API token is stored as a repository secret,
+      # for example:
       # - name: Deploy to Cloudflare Pages
       #   run: cf pages deploy dist --project-name lathephp-com
       #   env:
