@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router";
-import { navigation as nav, flattenNavLinks, findNavGroup, type NavLink } from "~/lib/docs/navigation";
+import { navigation as nav, flattenNavLinks, findNavGroup, pagePath, type NavLink } from "~/lib/docs/navigation";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
 import { Separator } from "~/components/ui/separator";
 
 export function PrevNextLinks() {
   const { pathname } = useLocation();
   const allLinks = flattenNavLinks(nav);
-  const currentIndex = allLinks.findIndex((link) => link.href === pathname);
+  const currentIndex = allLinks.findIndex((link) => link.href === pagePath(pathname));
 
   const prev: NavLink | undefined =
     currentIndex > 0 ? allLinks[currentIndex - 1] : undefined;

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { navigation as defaultNav, type NavGroup } from "~/lib/docs/navigation";
+import { navigation as defaultNav, pagePath, type NavGroup } from "~/lib/docs/navigation";
 import { cn } from "~/lib/utils";
 
 export function DocsNavigation({
@@ -21,12 +21,13 @@ export function DocsNavigation({
           </h4>
           <ul className="mt-3 flex flex-col gap-px border-l border-border">
             {group.links.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = pagePath(pathname) === link.href;
               return (
                 <li key={link.href}>
                   <Link
                     to={link.href}
                     onClick={onLinkClick}
+                    aria-current={isActive ? "page" : undefined}
                     className={cn(
                       "-ml-px block border-l-2 py-1.5 pl-4 text-[13px] leading-6 transition-colors",
                       isActive
