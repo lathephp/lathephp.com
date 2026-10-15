@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { RiArrowRightLine, RiBarChartLine, RiPlayLine } from "@remixicon/react";
+import { RiArrowRightLine, RiBarChartLine } from "@remixicon/react";
 import { LatheLogo } from "~/components/lathe-logo";
 import { ThemeToggle } from "~/components/theme-toggle";
 import { buttonVariants } from "~/components/ui/button";
@@ -49,10 +49,6 @@ export default function Home() {
             Read the docs
             <RiArrowRightLine data-icon="inline-end" />
           </Link>
-          <a href="https://demo.lathephp.com" className={buttonVariants({ size: "lg", variant: "outline" })}>
-            <RiPlayLine data-icon="inline-start" />
-            Try the demo
-          </a>
           <a href="https://github.com/lathephp/benchmarks" className={buttonVariants({ size: "lg", variant: "outline" })}>
             <RiBarChartLine data-icon="inline-start" />
             Benchmark results

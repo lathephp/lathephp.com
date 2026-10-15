@@ -53,12 +53,6 @@ export default function DocsLayout() {
               {/* Plain links styled as buttons: the Button component would
                   give them role="button". */}
               <a
-                href="https://demo.lathephp.com"
-                className={buttonVariants({ variant: "link", size: "sm", className: "text-muted-foreground" })}
-              >
-                Demo
-              </a>
-              <a
                 href="https://github.com/lathephp/benchmarks"
                 className={buttonVariants({ variant: "link", size: "sm", className: "text-muted-foreground" })}
               >

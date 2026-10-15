@@ -48,12 +48,12 @@ test("a page opened with a trailing slash is marked current", async ({ page }) =
   await expect(page.getByRole("link", { name: /^Next/ })).toHaveAttribute("href", "/docs/getting-started/commands");
 });
 
-test("the landing page links to the docs, the benchmarks and the demo", async ({ page }) => {
+test("the landing page links to the docs and the benchmarks, and not to the parked demo", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle("Lathe, an admin panel builder for Laravel");
   await expect(page.locator('a[href="/docs"]').first()).toBeVisible();
   await expect(page.locator('a[href="https://github.com/lathephp/benchmarks"]').first()).toBeVisible();
-  await expect(page.locator('a[href="https://demo.lathephp.com"]').first()).toBeVisible();
+  await expect(page.locator('a[href="https://demo.lathephp.com"]')).toHaveCount(0);
 });
 
 test.describe("at phone width", () => {
@@ -75,10 +75,9 @@ test.describe("at phone width", () => {
 
 test("the landing and header links are links, not buttons", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: "Try the demo" })).toHaveAttribute("href", "https://demo.lathephp.com");
   await expect(page.getByRole("link", { name: "Benchmark results" })).toHaveAttribute("href", "https://github.com/lathephp/benchmarks");
   await expect(page.getByRole("link", { name: "Read the docs" })).toHaveAttribute("href", "/docs");
   await page.goto("/docs");
-  await expect(page.getByRole("link", { name: "Demo", exact: true })).toHaveAttribute("href", "https://demo.lathephp.com");
+  await expect(page.locator('a[href="https://demo.lathephp.com"]')).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Benchmarks", exact: true })).toHaveAttribute("href", "https://github.com/lathephp/benchmarks");
 });
