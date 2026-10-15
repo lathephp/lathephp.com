@@ -18,9 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # While lathephp/lathe is private, LATHE_DOCS_TOKEN must be a token that
-      # can read it.
-      GH_TOKEN: ${{ secrets.LATHE_DOCS_TOKEN || github.token }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
 
@@ -60,10 +58,12 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-      # Owner step: the Cloudflare Pages deploy is added here once the Pages
-      # project exists and its API token is stored as a repository secret,
-      # for example:
-      # - name: Deploy to Cloudflare Pages
-      #   run: cf pages deploy dist --project-name lathephp-com
-      #   env:
-      #     CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      # Cloudflare Pages project lathephp-com (account Personal), domain lathephp.com.
+      # The cf CLI cannot upload a folder to Pages, so this one step uses wrangler.
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.136.3"
+          command: pages deploy dist --project-name=lathephp-com --branch=main

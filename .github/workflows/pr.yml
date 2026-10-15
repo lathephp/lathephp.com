@@ -15,14 +15,12 @@ jobs:
           # The word check also reads every commit message.
           fetch-depth: 0
 
-      # The site builds from the docs folder of lathephp/lathe at main. While
-      # that repo is private, LATHE_DOCS_TOKEN must be a token that can read it.
+      # The site builds from the docs folder of lathephp/lathe at main.
       - uses: actions/checkout@v4
         with:
           repository: lathephp/lathe
           ref: main
           path: .lathe
-          token: ${{ secrets.LATHE_DOCS_TOKEN || github.token }}
           sparse-checkout: docs
 
       - uses: pnpm/action-setup@v4

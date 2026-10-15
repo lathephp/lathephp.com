@@ -52,19 +52,10 @@ check (`.github/workflows/pr.yml`).
 when a Lathe release sends a `lathe-release` repository dispatch with
 `{"tag": "<release tag>"}`. A dispatch builds that tag. A push builds the
 latest release of lathephp/lathe, or `main` when there is no release yet. The
-workflow uploads `dist/` as an artifact.
-
-## Owner steps
-
-1. **Read access to lathephp/lathe.** While that repository is private, add a
-   repository secret `LATHE_DOCS_TOKEN` here: a fine-grained token with
-   read-only access to the contents of lathephp/lathe. Both workflows use it to
-   fetch the docs. When lathephp/lathe is public, the secret is no longer
-   needed.
-2. **Cloudflare Pages.** Create a Pages project for `lathephp.com`, point the
-   domain at it, and store a Cloudflare API token that can deploy to it as a
-   repository secret. Then replace the commented deploy step at the end of
-   `deploy.yml` with a step that deploys `dist/` to that project.
+workflow uploads `dist/` as an artifact and deploys it to the Cloudflare Pages
+project `lathephp-com`, which serves `lathephp.com`. It reads the repository secrets
+`CLOUDFLARE_API_TOKEN` (a token that can edit Pages on that account) and
+`CLOUDFLARE_ACCOUNT_ID`.
 
 ## Licence
 
