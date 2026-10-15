@@ -47,18 +47,8 @@ export default function DocsLayout() {
             <DocsSearch />
           </div>
 
-          {/* Right: links + theme */}
+          {/* Right: theme */}
           <div className="flex items-center gap-1">
-            <div className="hidden items-center gap-0.5 sm:flex">
-              {/* Plain links styled as buttons: the Button component would
-                  give them role="button". */}
-              <a
-                href="https://github.com/lathephp/benchmarks"
-                className={buttonVariants({ variant: "link", size: "sm", className: "text-muted-foreground" })}
-              >
-                Benchmarks
-              </a>
-            </div>
             <ThemeToggle />
           </div>
         </div>
