@@ -3,10 +3,8 @@
   "include": [
     "vite.config.ts",
     "react-router.config.ts",
-    "playwright.config.ts",
     "app/lib/docs/vite-plugin-docs.ts",
-    "app/lib/docs/docs-source.ts",
-    "tests/**/*"
+    "app/lib/docs/docs-source.ts"
   ],
   "compilerOptions": {
     "composite": true,

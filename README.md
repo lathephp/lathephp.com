@@ -40,7 +40,6 @@ the docs, run `LATHE_DOCS_DIR=../lathe/docs pnpm dev`.
 | `pnpm check:words` | The predecessor's name is in no tracked file, file name, `dist/` file or commit message, and the product is never called part of Laravel. |
 | `LATHE_DOCS_DIR=... pnpm check:smoke` | Builds the site, then checks that `dist/` holds the landing page, `/docs` and the doc pages, has no server code, and has the right landing page title. |
 | `pnpm check:links` | Every internal link in `dist/` points at a built file, and every `#anchor` names an id on its page. Run it after a build. |
-| `LATHE_DOCS_DIR=... pnpm test:browser` | Serves `dist/` and opens it in Chromium: the sidebar, the configuration and commands pages, search, trailing slashes and the landing page links. Run it after a build. |
 | `pnpm typecheck` | TypeScript. |
 
 Every pull request runs the word check, the build smoke test and the link

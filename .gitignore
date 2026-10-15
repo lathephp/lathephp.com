@@ -5,6 +5,4 @@
 /build/
 /.react-router/
 /.docs-cache/
-/test-results/
-/playwright-report/
 *.tsbuildinfo

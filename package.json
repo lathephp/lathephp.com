@@ -13,11 +13,9 @@
     "typecheck": "react-router typegen && tsc -b",
     "check:words": "bash scripts/check-word.sh",
     "check:links": "node scripts/check-links.mjs",
-    "check:smoke": "node scripts/build-smoke.mjs",
-    "test:browser": "playwright test"
+    "check:smoke": "node scripts/build-smoke.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "^1.63.0",
     "@react-router/dev": "7.18.1",
     "@shikijs/rehype": "^4.5.0",
     "@shikijs/transformers": "^4.5.0",
