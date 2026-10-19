@@ -18,6 +18,16 @@ export function meta() {
   ];
 }
 
+// Each screenshot has a light and a dark file, swapped with the site's theme.
+function Screenshot({ name, alt, height }: { name: string; alt: string; height: number }) {
+  return (
+    <div className="mt-12 overflow-hidden rounded-lg border border-border shadow-sm">
+      <img src={`/images/home/${name}-light.png`} alt={alt} width={1440} height={height} className="doc-img-light h-auto w-full" />
+      <img src={`/images/home/${name}-dark.png`} alt={alt} width={1440} height={height} className="doc-img-dark h-auto w-full" />
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -50,6 +60,13 @@ export default function Home() {
             <RiArrowRightLine data-icon="inline-end" />
           </Link>
         </div>
+
+        <Screenshot name="orders" height={900} alt="The Orders list in Lathe: a table of orders with status badges, totals and dates, with search, filters and tabs above it" />
+        <h2 className="mt-16 text-2xl font-semibold tracking-tight text-foreground">Dashboards</h2>
+        <p className="mt-3 max-w-2xl text-muted-foreground">
+          One range picker drives every card, and each user can arrange their own layout.
+        </p>
+        <Screenshot name="dashboard" height={560} alt="The Sales dashboard in Lathe: orders, revenue and paid orders cards above charts of orders per day and orders by status, with a 7 days, 30 days and 12 months range picker" />
       </main>
 
       <footer className="border-t border-border">
