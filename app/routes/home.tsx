@@ -61,12 +61,12 @@ export default function Home() {
           </Link>
         </div>
 
-        <Screenshot name="orders" height={900} alt="The Orders list in Lathe: a table of orders with status badges, totals and dates, with search, filters and tabs above it" />
+        <Screenshot name="orders" height={900} alt="The Orders list in Lathe: a grid of orders filtered by a Status: Pending chip in the filter bar, a cell cursor on the first row, and the preview panel open beside it on that order" />
         <h2 className="mt-16 text-2xl font-semibold tracking-tight text-foreground">Dashboards</h2>
         <p className="mt-3 max-w-2xl text-muted-foreground">
           One range picker drives every card, and each user can arrange their own layout.
         </p>
-        <Screenshot name="dashboard" height={560} alt="The Sales dashboard in Lathe: orders, revenue and paid orders cards above charts of orders per day and orders by status, with a 7 days, 30 days and 12 months range picker" />
+        <Screenshot name="dashboard" height={560} alt="The Sales dashboard in Lathe: revenue, orders, average order and shipped cards above charts of revenue per day and orders by status, with a 7 days, 30 days and 12 months range picker" />
       </main>
 
       <footer className="border-t border-border">
